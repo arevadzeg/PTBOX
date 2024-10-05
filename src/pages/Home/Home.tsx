@@ -9,6 +9,7 @@ import {
   useSensors,
   DragStartEvent,
   DragEndEvent,
+  UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -18,31 +19,68 @@ import {
 import SortableItem from "./SortableItem";
 import "./home.scss";
 import ScanCard from "../../components/ScanCard/ScanCard";
+import useGetScans, { Scan, useUpdateSortOrder } from "../../api/scansApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 const App: FC = () => {
-  const [items, setItems] = useState(
-    Array.from({ length: 20 }, (_, i) => (i + 1).toString())
-  );
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+
+  const queryClient = useQueryClient();
+  const updateSortOrder = useUpdateSortOrder();
+  const { data: items = [], isLoading } = useGetScans();
+
+  const selectedScan = items.find((item) => item.id === activeId);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id);
   }, []);
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
 
-    if (active.id !== over?.id) {
-      setItems((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over!.id);
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+      if (active.id !== over?.id) {
+        queryClient.setQueryData<Scan[]>(["scans"], (oldItems = []) => {
+          const oldIndex = oldItems.findIndex((item) => item.id === active.id);
+          const newIndex = oldItems.findIndex((item) => item.id === over?.id);
 
-    setActiveId(null);
-  }, []);
+          // Reorder the items in the array
+          const reorderedItems = arrayMove(oldItems, oldIndex, newIndex);
+
+          // Determine the new sort order based on the new index
+          const prevItem = reorderedItems[newIndex - 1];
+          const nextItem = reorderedItems[newIndex + 1];
+
+          const prevSortOrder = prevItem?.sortOrder || 0;
+          const nextSortOrder = nextItem?.sortOrder || prevSortOrder + 1;
+
+          const newSortOrder = (prevSortOrder + nextSortOrder) / 2;
+
+          console.log({
+            prevSortOrder,
+            nextSortOrder,
+            newSortOrder,
+          });
+
+          // Update the sort order in the database using the mutation
+          updateSortOrder.mutate({
+            id: String(active.id),
+            newSortOrder,
+          });
+
+          // Return reordered items to update the cache
+          return reorderedItems.map((item) =>
+            item.id === active.id ? { ...item, sortOrder: newSortOrder } : item
+          );
+        });
+      }
+
+      setActiveId(null);
+    },
+    [queryClient, updateSortOrder]
+  );
+
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
   }, []);
@@ -56,13 +94,17 @@ const App: FC = () => {
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}
       >
-        <SortableContext items={items} strategy={rectSortingStrategy}>
-          {items.map((id) => (
-            <SortableItem key={id} id={id} />
-          ))}
-        </SortableContext>
+        {!isLoading && (
+          <SortableContext items={items} strategy={rectSortingStrategy}>
+            {items.map((item) => (
+              <SortableItem key={item.id} scanDetail={item} />
+            ))}
+          </SortableContext>
+        )}
         <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
-          {activeId ? <ScanCard id={activeId} isDragging /> : null}
+          {selectedScan ? (
+            <ScanCard isDragging scanDetail={selectedScan} />
+          ) : null}
         </DragOverlay>
       </DndContext>
     </div>

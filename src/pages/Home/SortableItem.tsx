@@ -1,10 +1,14 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import Item, { ItemProps } from "./Item";
 import ScanCard from "../../components/ScanCard/ScanCard";
+import { Scan } from "../../api/scansApi";
 
-const SortableItem: FC<ItemProps> = (props) => {
+interface SortItemProps {
+  scanDetail: Scan;
+}
+
+const SortableItem: FC<SortItemProps> = ({ scanDetail }) => {
   const {
     isDragging,
     attributes,
@@ -12,7 +16,7 @@ const SortableItem: FC<ItemProps> = (props) => {
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: props.id });
+  } = useSortable({ id: scanDetail.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -24,7 +28,7 @@ const SortableItem: FC<ItemProps> = (props) => {
       ref={setNodeRef}
       style={style}
       withOpacity={isDragging}
-      {...props}
+      scanDetail={scanDetail}
       {...attributes}
       {...listeners}
     />
