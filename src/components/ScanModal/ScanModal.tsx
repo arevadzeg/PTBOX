@@ -1,8 +1,10 @@
-import { Input, Modal } from "antd";
+import { Input, Modal, Tooltip } from "antd";
 import { useCreateScan } from "../../api/scansApi";
 import { useState } from "react";
 import validateDomain from "../../utils/validateDomain";
 import Button from "../Button/Button";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import "./scanModal.scss";
 
 interface ScanModalProps {
   isScanModalOpen: boolean;
@@ -39,7 +41,24 @@ const ScanModal = ({
       closable={false}
     >
       <div className="scan-modal">
-        <h3 className="title">Scan for</h3>
+        <h3 className="title">
+          Scan for{" "}
+          <Tooltip
+            title={
+              <div>
+                <div>Only allowed</div>
+                <ul>
+                  <li>Domain</li>
+                  <li>IP addresses</li>
+                  <li>Subdomains</li>
+                  <li>LinkedIn accounts</li>
+                </ul>
+              </div>
+            }
+          >
+            <InfoCircleOutlined />
+          </Tooltip>
+        </h3>
         <Input onChange={handleDomainChange} />
 
         <Button

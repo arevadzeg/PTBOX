@@ -1,0 +1,9 @@
+.scan-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .title {
+    text-align: center;
+  }
+}
