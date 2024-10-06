@@ -1,7 +1,9 @@
 TO START THE APP YOU NEED TO FOLLOW THE FOLLOWING STEPS
 
-**Front-end
-**
+**Front-end**
+
+
+
 cd Desktop/
 
 git clone https://github.com/arevadzeg/PTBOX.git
