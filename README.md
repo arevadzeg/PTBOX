@@ -16,3 +16,5 @@ npm run dev
 
 The app will be started on http://localhost:5173/
 
+No ENVs are required BE endpoint is hardcoded to http://localhost:8080/
+The database is SQLlite in memory
