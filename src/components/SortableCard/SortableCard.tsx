@@ -4,11 +4,11 @@ import { CSS } from "@dnd-kit/utilities";
 import ScanCard from "../../components/ScanCard/ScanCard";
 import { Scan } from "../../api/scansApi";
 
-interface SortItemProps {
+interface SortableCardProps {
   scanDetail: Scan;
 }
 
-const SortableItem: FC<SortItemProps> = ({ scanDetail }) => {
+const SortableCard: FC<SortableCardProps> = ({ scanDetail }) => {
   const {
     isDragging,
     attributes,
@@ -23,24 +23,16 @@ const SortableItem: FC<SortItemProps> = ({ scanDetail }) => {
     transition: transition || undefined,
   };
 
-  console.log("s", attributes, listeners);
-
   return (
     <ScanCard
       ref={setNodeRef}
       style={style}
       withOpacity={isDragging}
       scanDetail={scanDetail}
-      onClick={(e) => {
-        console.log("YLE");
-        if (e.detail == 2) {
-          console.log("Double Clicked");
-        }
-      }}
       {...attributes}
       {...listeners}
     />
   );
 };
 
-export default SortableItem;
+export default SortableCard;

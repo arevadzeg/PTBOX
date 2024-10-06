@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "./apiClient";
 import API_ENDPOINTS from "./endpoints";
 
-// Product interface definition
 export interface Scan {
   id: string;
   domain: string;
@@ -20,7 +19,6 @@ interface CreateScanRequest {
   domain: string;
 }
 
-// Fetch product scans function
 const fetchScans = async (): Promise<Scan[]> => {
   const response = await apiClient.get(`${API_ENDPOINTS.SCANS.GET_ALL_SCANS}`);
   return response.data;
@@ -33,8 +31,16 @@ const fetchSingleScan = async (scanId: string): Promise<Scan> => {
   return response.data;
 };
 
-// Custom hook for infinite scrolling
-const useGetScans = () => {
+const updateSortOrder = async (data: UpdateSortOrderRequest): Promise<void> => {
+  await apiClient.post(API_ENDPOINTS.SCANS.SORT_SCAN, data);
+};
+
+const createScan = async (data: CreateScanRequest): Promise<void> => {
+  await apiClient.post(API_ENDPOINTS.SCANS.CREATE_SCAN, data);
+};
+
+// HOOKS
+export const useGetScans = () => {
   return useQuery<Scan[], Error>({
     queryKey: ["scans"],
     queryFn: fetchScans,
@@ -47,32 +53,11 @@ export const useGetSingleScan = (scanId: string) => {
   });
 };
 
-const updateSortOrder = async (data: UpdateSortOrderRequest): Promise<void> => {
-  const response = await apiClient.post(API_ENDPOINTS.SCANS.SORT_SCAN, data);
-  if (response.status !== 200) {
-    throw new Error("Failed to update scan order");
-  }
-};
-
-// Custom hook for using the mutation
+// HOOKS FOR MUTATION
 export const useUpdateSortOrder = () => {
   return useMutation<void, Error, UpdateSortOrderRequest>({
     mutationFn: updateSortOrder,
-    onSuccess: () => {
-      console.log("Scan order updated successfully");
-      // Optionally, you could invalidate queries here to refetch updated data
-    },
-    onError: (error) => {
-      console.error("Error updating scan order:", error);
-    },
   });
-};
-
-const createScan = async (data: CreateScanRequest): Promise<void> => {
-  const response = await apiClient.post(API_ENDPOINTS.SCANS.CREATE_SCAN, data);
-  if (response.status !== 200) {
-    throw new Error("Failed to create scan order");
-  }
 };
 
 export const useCreateScan = (callback: () => void) => {
@@ -80,15 +65,8 @@ export const useCreateScan = (callback: () => void) => {
   return useMutation<void, Error, CreateScanRequest>({
     mutationFn: createScan,
     onSuccess: () => {
-      console.log("Scan created successfully");
       queryClient.invalidateQueries({ queryKey: ["scans"] });
       callback();
-      // Optionally, you could invalidate queries here to refetch updated data
-    },
-    onError: (error) => {
-      console.error("Error creating scan", error);
     },
   });
 };
-
-export default useGetScans;

@@ -1,0 +1,22 @@
+@import "/src/styles/variables.scss";
+
+.btn {
+  background-color: $green;
+  color: $white;
+  border-color: $darkGreen;
+
+  &:hover {
+    &.ant-btn {
+      &.ant-btn-default {
+        color: $white;
+        background-color: $green;
+        border-color: $darkGreen;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &.btn-full-width {
+    width: 100%;
+  }
+}

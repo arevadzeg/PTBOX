@@ -1,7 +1,8 @@
-import { Button, Input, Modal } from "antd";
+import { Input, Modal } from "antd";
 import { useCreateScan } from "../../api/scansApi";
 import { useState } from "react";
 import validateDomain from "../../utils/validateDomain";
+import Button from "../Button/Button";
 
 interface ScanModalProps {
   isScanModalOpen: boolean;

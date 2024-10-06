@@ -3,7 +3,7 @@ import formatDate from "../../utils/formatDate";
 import "./scanCard.scss";
 import { Scan } from "../../api/scansApi";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
+import Button from "../Button/Button";
 
 export type ItemProps = HTMLAttributes<HTMLDivElement> & {
   withOpacity?: boolean;
@@ -34,7 +34,6 @@ const ScanCard = forwardRef<HTMLDivElement, ItemProps>(
     const navigate = useNavigate();
 
     const navigateToScan = () => {
-      console.log("aq movida");
       navigate(`/${scanDetail.id}`);
     };
 
@@ -66,7 +65,9 @@ const ScanCard = forwardRef<HTMLDivElement, ItemProps>(
             </p>
           </div>
           <div className="card-back">
-            <Button onClick={navigateToScan}>More Details</Button>
+            <Button onClick={navigateToScan} isFullWidth={false}>
+              More Details
+            </Button>
             <p className="scan-card-item">
               <b>ID:</b> {scanDetail.id}
             </p>
