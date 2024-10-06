@@ -1,50 +1,23 @@
-# React + TypeScript + Vite
+TO START THE APP YOU NEED TO FOLLOW THE FOLLOWING STEPS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Front-end**
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+cd Desktop/
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+git clone https://github.com/arevadzeg/PTBOX.git
 
-- Configure the top-level `parserOptions` property like this:
+cd PTBOX
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+npm i
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+npm run dev
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+The app will be started on http://localhost:5173/
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+No ENVs are required BE endpoint is hardcoded to http://localhost:8080/
+The database is SQLlite in memory
+
+DEMO OF THE APP https://www.loom.com/share/3c57d7e6205149db9b6d811b74c04f87?sid=43a72c38-cdd9-49c9-95e5-540448935f22
+DEPLOYED VERSION https://vitereact763a.vercel.app/ (BE IS CONNECTED TO HARD-CODED LOCAL ENDPOINT)
