@@ -13,7 +13,7 @@ function App() {
       element: <Home />,
     },
     {
-      path: ":id/",
+      path: ":scanId/",
       element: <ScanDetails />,
     },
   ]);

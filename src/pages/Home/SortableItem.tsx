@@ -23,12 +23,20 @@ const SortableItem: FC<SortItemProps> = ({ scanDetail }) => {
     transition: transition || undefined,
   };
 
+  console.log("s", attributes, listeners);
+
   return (
     <ScanCard
       ref={setNodeRef}
       style={style}
       withOpacity={isDragging}
       scanDetail={scanDetail}
+      onClick={(e) => {
+        console.log("YLE");
+        if (e.detail == 2) {
+          console.log("Double Clicked");
+        }
+      }}
       {...attributes}
       {...listeners}
     />

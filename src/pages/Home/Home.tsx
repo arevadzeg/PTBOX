@@ -24,7 +24,20 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const App: FC = () => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    })
+  );
 
   const queryClient = useQueryClient();
   const updateSortOrder = useUpdateSortOrder();

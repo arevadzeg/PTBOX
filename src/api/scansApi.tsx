@@ -22,6 +22,13 @@ const fetchScans = async (): Promise<Scan[]> => {
   return response.data;
 };
 
+const fetchSingleScan = async (scanId: string): Promise<Scan> => {
+  const response = await apiClient.get(
+    `${API_ENDPOINTS.SCANS.GET_SCAN_BY_ID}/${scanId}`
+  );
+  return response.data;
+};
+
 // Custom hook for infinite scrolling
 const useGetScans = () => {
   return useQuery<Scan[], Error>({
@@ -29,10 +36,15 @@ const useGetScans = () => {
     queryFn: fetchScans,
   });
 };
+export const useGetSingleScan = (scanId: string) => {
+  return useQuery<Scan, Error>({
+    queryKey: ["scan", scanId],
+    queryFn: () => fetchSingleScan(scanId),
+  });
+};
 
 const updateSortOrder = async (data: UpdateSortOrderRequest): Promise<void> => {
   const response = await apiClient.post(API_ENDPOINTS.SCANS.SORT_SCAN, data);
-
   if (response.status !== 200) {
     throw new Error("Failed to update scan order");
   }
