@@ -1,5 +1,21 @@
 .home {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  .scan-btn {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .dnd-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+
+.scan-modal {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
+
+  .title {
+    text-align: center;
+  }
 }
